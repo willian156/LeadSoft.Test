@@ -11,7 +11,7 @@ using LeadSoft.Test.Models.DTO.User;
 
 namespace LeadSoft.Test.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -24,12 +24,12 @@ namespace LeadSoft.Test.Controllers
 
 
 
-        [HttpGet("GetUsers/{id}")]
-        public async Task<ActionResult<List<User>>> GetUsers(int id)
+        [HttpGet("GetUsers/{AdminId}")]
+        public async Task<ActionResult<List<User>>> GetUsers(int AdminId)
         {
             try
             {
-                var verifyRole = _context.Users.Find(id).Role;
+                var verifyRole = _context.Users.Find(AdminId).Role;
 
                 if ((int)verifyRole == 0)
                 {
@@ -84,88 +84,35 @@ namespace LeadSoft.Test.Controllers
             }
         }
 
-
-        // GET: api/Users/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return user;
-        }
-
-        //Revisar com o front
-        // PUT: api/Users/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
-        {
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(user).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<User>> PostUser(CreateUser user)
+        [HttpPost("CreateUser/{AdminId}")]
+        public async Task<IActionResult> PostUser(int AdminId, CreateUser user)
         {
-            var usr = new User();
-            var newUser = usr.CreateUser(user);
-            _context.Users.Add(newUser);
-            await _context.SaveChangesAsync();
-
-            //fazer uma função para isso
-            var newUserId = _context.Users.FirstOrDefault<User>(x => x.Username == user.Username).Id;
-
-            return CreatedAtAction("GetUser", new { id = newUserId }, user);
-        }
-
-        //Revisar com o front
-        // DELETE: api/Users/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            try
             {
-                return NotFound();
+                var roleVerify = (int)_context.Users.FindAsync(AdminId).Result.Role;
+
+                if (roleVerify == 0)
+                {
+
+                    var usr = new User();
+                    var newUser = usr.CreateUser(user);
+                    _context.Users.Add(newUser);
+                    await _context.SaveChangesAsync();
+
+
+                    var newUserId = _context.Users.FirstOrDefault<User>(x => x.Username == user.Username).Id;
+
+                    return Ok(new { message = $@"Usuário cadastrado com sucesso! Usuário ID: {newUserId}" });
+                }
+
+                return Unauthorized(new { message = $@"Você não tem autorização para cadastrar usuários!" });
             }
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.Id == id);
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }
