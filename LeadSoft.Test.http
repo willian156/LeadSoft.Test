@@ -1,6 +1,0 @@
-@LeadSoft.Test_HostAddress = http://localhost:5081
-
-GET {{LeadSoft.Test_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
