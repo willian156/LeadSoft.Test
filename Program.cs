@@ -1,5 +1,6 @@
 using LeadSoft.Test.Controllers;
 using LeadSoft.Test.DAO;
+using LeadSoft.Test.Hubs;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
 
@@ -16,6 +17,8 @@ builder.Services.AddCors(
         policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
     }
     );
+
+builder.Services.AddSignalR().AddJsonProtocol();
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -35,5 +38,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<ProcessingDataHub>("/ProcessListener");
 
 app.Run();
