@@ -24,8 +24,9 @@ services:
     depends_on:
       - db
     environment:
+      ASPNETCORE_URLS: "http://0.0.0.0:8080;http://0.0.0.0:8081"
       ConnectionStrings__PostgreSQL: "Host=db;Port=5432;Database=leadsoftdb;Username=leadsoft;Password=leadsoft"
-      ALLOWED_ORIGINS: "http://localhost:64461,http://localhost:64462,http://localhost:64463"
+      ALLOWED_ORIGINS: "http://localhost:64461,http://localhost:64462,http://localhost:64463, http://leadsoft.FRONT/64461"
       CONNECTION_STRING: "Host=db;Port=5432;Database=leadsoftdb;Username=leadsoft;Password=leadsoft"
     ports:
       - "8080:8080"
@@ -40,8 +41,8 @@ services:
       dockerfile: Dockerfile
     container_name: leadsoft.FRONT
     environment:
-      VITE_APP_API_URL: "http://leadsoft.API:8080"
-      VITE_APP_WSS_URL: "https://leadsoft.API:8080/ProcessListener"
+      VITE_APP_API_URL: "http://localhost:8080/api"
+      VITE_APP_WSS_URL: "http://localhost:8080/ProcessListener"
     ports:
       - "64461:64461"
     command: ["npm", "run", "dev"]

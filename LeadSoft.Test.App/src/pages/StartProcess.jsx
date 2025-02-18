@@ -43,7 +43,7 @@ export default function StartProcess() {
 
     const StartProcessing = async (e) => {
         e.preventDefault();
-        debugger;
+          
         let data = JSON.stringify({
             "userId": user.id,
             "type": type,
@@ -72,7 +72,7 @@ export default function StartProcess() {
 
     const CancelProcess = async (e) => {
         e.preventDefault()
-        debugger;
+          
         let config = {
             method: 'post',
             maxBodyLength: Infinity,
