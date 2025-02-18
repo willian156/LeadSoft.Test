@@ -3,18 +3,23 @@ using LeadSoft.Test.DAO;
 using LeadSoft.Test.Hubs;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
+using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
+Env.Load();
+
+var allowedOrigins = Environment.GetEnvironmentVariable("ALLOWED_ORIGINS")?.Split(",");
+var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
 builder.Services.AddDbContext<DataContext>(
-    options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQL"))
+    options => options.UseNpgsql(connectionString)
     );
 
 builder.Services.AddCors(
     options =>
     {
         options.AddPolicy("AllowAll",
-        policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+        policy => policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod().AllowCredentials());
     }
     );
 

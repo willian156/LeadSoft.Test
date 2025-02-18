@@ -1,0 +1,8 @@
+D:\Visual Studio Repos\C#\Test\obj\Debug\net8.0\LeadSoft.Test.csproj.AssemblyReference.cache
+D:\Visual Studio Repos\C#\Test\obj\Debug\net8.0\LeadSoft.Test.GeneratedMSBuildEditorConfig.editorconfig
+D:\Visual Studio Repos\C#\Test\obj\Debug\net8.0\LeadSoft.Test.AssemblyInfoInputs.cache
+D:\Visual Studio Repos\C#\Test\obj\Debug\net8.0\LeadSoft.Test.AssemblyInfo.cs
+D:\Visual Studio Repos\C#\Test\obj\Debug\net8.0\LeadSoft.Test.csproj.CoreCompileInputs.cache
+D:\Visual Studio Repos\C#\Test\obj\Debug\net8.0\LeadSoft.Test.MvcApplicationPartsAssemblyInfo.cs
+D:\Visual Studio Repos\C#\Test\obj\Debug\net8.0\LeadSoft.Test.MvcApplicationPartsAssemblyInfo.cache
+D:\Visual Studio Repos\C#\Test\obj\Debug\net8.0\LeadSoft.Test.sourcelink.json

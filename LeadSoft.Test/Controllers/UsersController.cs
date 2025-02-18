@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using LeadSoft.Test.Commom.Models;
 using LeadSoft.Test.DAO;
 using LeadSoft.Test.Models.DTO.User;
+using LeadSoft.Test.Commom.Enums;
 
 namespace LeadSoft.Test.Controllers
 {
@@ -23,7 +24,7 @@ namespace LeadSoft.Test.Controllers
         }
 
 
-
+        //Get Users only with AdminId
         [HttpGet("GetUsers/{AdminId}")]
         public async Task<ActionResult<List<User>>> GetUsers(int AdminId)
         {
@@ -31,7 +32,7 @@ namespace LeadSoft.Test.Controllers
             {
                 var verifyRole = _context.Users.Find(AdminId).Role;
 
-                if ((int)verifyRole == 0)
+                if (verifyRole == RolesEnum.Admin)
                 {
 
                     var user = await _context.Users.ToListAsync();
@@ -56,7 +57,7 @@ namespace LeadSoft.Test.Controllers
             }
         }
 
-        //Does the login and returns the Id and Role as coockies
+        //Does the login and returns the Id and Role as cookies
         [HttpPost("Login")]
         public async Task<ActionResult<Cookies>> Login(string username, string password)
         {
@@ -73,6 +74,7 @@ namespace LeadSoft.Test.Controllers
                     var cookies = new Cookies()
                     {
                         Id = login.Result.Id,
+                        username = login.Result.Username,
                         Role = login.Result.Role
                     };
                     return cookies;
@@ -108,6 +110,30 @@ namespace LeadSoft.Test.Controllers
                 }
 
                 return Unauthorized(new { message = $@"Você não tem autorização para cadastrar usuários!" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        //Creates First login to manage the system
+        [HttpPost("CreateStarterUser")]
+        public async Task<IActionResult> PostStarteUser(CreateUser user)
+        {
+            try
+            {
+
+                user.Role = RolesEnum.Admin;
+                var usr = new User();
+                var newUser = usr.CreateUser(user);
+                _context.Users.Add(newUser);
+                await _context.SaveChangesAsync();
+
+
+                var newUserId = _context.Users.FirstOrDefault<User>(x => x.Username == user.Username).Id;
+
+                return Ok(new { message = $@"Administrador cadastrado com sucesso! Administrador ID: {newUserId}" });
             }
             catch (Exception ex)
             {

@@ -13,6 +13,8 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - leadsoft-net
 
   app:
     build:
@@ -23,10 +25,32 @@ services:
       - db
     environment:
       ConnectionStrings__PostgreSQL: "Host=db;Port=5432;Database=leadsoftdb;Username=leadsoft;Password=leadsoft"
+      ALLOWED_ORIGINS: "http://localhost:64461,http://localhost:64462,http://localhost:64463"
+      CONNECTION_STRING: "Host=db;Port=5432;Database=leadsoftdb;Username=leadsoft;Password=leadsoft"
     ports:
       - "8080:8080"
       - "8081:8081"
-    entrypoint: ["/bin/sh", "-c", "dotnet-ef database update && dotnet LeadSoft.Test.dll"]
+    entrypoint: ["/bin/sh", "-c", "dotnet LeadSoft.Test.dll"]
+    networks:
+      - leadsoft-net
+
+  front:
+    build:
+      context: ../LeadSoft.Test.App
+      dockerfile: Dockerfile
+    container_name: leadsoft.FRONT
+    environment:
+      VITE_APP_API_URL: "http://leadsoft.API:8080"
+      VITE_APP_WSS_URL: "https://leadsoft.API:8080/ProcessListener"
+    ports:
+      - "64461:64461"
+    command: ["npm", "run", "dev"]
+    networks:
+      - leadsoft-net
 
 volumes:
   pgdata:
+
+networks:
+  leadsoft-net:
+    driver: bridge
