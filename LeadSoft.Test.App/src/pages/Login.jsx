@@ -23,7 +23,7 @@ export default function Login() {
     }
 
     const CreateStarterLogin = () => {
-        debugger;
+          
         let data = JSON.stringify({
             "username": username,
             "password": password,
