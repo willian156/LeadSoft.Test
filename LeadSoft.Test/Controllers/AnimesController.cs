@@ -51,12 +51,13 @@ namespace LeadSoft.Test.Controllers
             try
             {
                 var verifyRole = _context.Users.Find(AdminId).Role;
+                var getUser = _context.Users.Find(process.UserId);
 
                 if (verifyRole == RolesEnum.Admin)
                 {
 
 
-                    string groupId = $"{process.UserId}_{process.Type}_{process.Source}";
+                    string groupId = $"{process.UserId}_{getUser.Username}";
 
                     var usr = _context.Users.FirstOrDefault(x => x.Id == process.UserId);
 
@@ -85,7 +86,8 @@ namespace LeadSoft.Test.Controllers
                             using (var reader = new StreamReader(csvFilePath))
                             {
                                 int validLines = 0;
-
+                                await _hubContext.Clients.Group(groupId)
+                                   .SendAsync("ProcessingStarted", groupId);
                                 while (!reader.EndOfStream && !cts.Token.IsCancellationRequested)
                                 {
                                     var line = await reader.ReadLineAsync();
