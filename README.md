@@ -28,4 +28,4 @@ Para executar o código, certifique-se de ter as seguintes ferramentas instalada
 
    ```sh
    dotnet-ef database upgrade
-9. Vocè estará apto para utilizar o programa!
+9. Você estará apto para utilizar o programa!
