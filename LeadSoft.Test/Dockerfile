@@ -22,5 +22,6 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "LeadSoft.Test.dll"]
+COPY Archive /app/Archive
 
 
