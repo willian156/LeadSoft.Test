@@ -7,7 +7,7 @@ EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
+WORKDIR /src 
 COPY ["LeadSoft.Test.csproj", "."]
 RUN dotnet restore "./LeadSoft.Test.csproj"
 COPY . .
@@ -22,3 +22,5 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "LeadSoft.Test.dll"]
+
+

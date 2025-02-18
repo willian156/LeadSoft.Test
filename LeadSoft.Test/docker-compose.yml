@@ -30,7 +30,7 @@ services:
     ports:
       - "8080:8080"
       - "8081:8081"
-    entrypoint: ["/bin/sh", "-c", "dotnet-ef database update && dotnet LeadSoft.Test.dll"]
+    entrypoint: ["/bin/sh", "-c", "dotnet LeadSoft.Test.dll"]
     networks:
       - leadsoft-net
 
@@ -43,7 +43,7 @@ services:
       VITE_APP_API_URL: "http://leadsoft.API:8080"
       VITE_APP_WSS_URL: "https://leadsoft.API:8080/ProcessListener"
     ports:
-      - "3000:3000"
+      - "64461:64461"
     command: ["npm", "run", "dev"]
     networks:
       - leadsoft-net
