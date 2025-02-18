@@ -21,3 +21,11 @@ Para executar o código, certifique-se de ter as seguintes ferramentas instalada
 
    ```sh
    docker compose up --build
+5. Verifique o IP e porta do banco de dados (o padrão é localhost:5432)
+6. Verifique se a connectionString da API está apontando para o db corretamente.
+7. Abra um terminal **PowerShell** dentro da pasta `LeadSoft.Test`.
+8. Execute o seguinte comando para construir e iniciar os containers Docker:
+
+   ```sh
+   dotnet-ef database upgrade
+9. Vocè estará apto para utilizar o programa!
